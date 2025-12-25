@@ -19,7 +19,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
-          playwright install chromium
+          playwright install chromium --with-deps
       - name: Run Sync Script
         env:
           CPS_USERNAME: ${{ secrets.CPS_USERNAME }}
