@@ -2,7 +2,7 @@ name: Daily Data Download and Sync
 
 on:
   schedule:
-    - cron: '0 23 * * *'
+    - cron: '0 21 * * *'
   workflow_dispatch: # Allows manual trigger
     inputs:
       manual_reason:
