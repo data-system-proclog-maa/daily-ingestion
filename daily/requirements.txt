@@ -2,6 +2,7 @@ playwright
 python-dotenv
 synology-api
 pandas
+pandas-gbq
 google-cloud-bigquery
 google-auth
 openpyxl
