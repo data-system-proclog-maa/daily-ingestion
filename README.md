@@ -6,7 +6,8 @@ This repository hosts the data ingestion pipelines for the ETL process. It autom
 ## Folder Structure
 - **`daily/`**: Production-ready scripts for daily data ingestion.
     - `automation.py`: Main script for downloading reports (PO, RFM, TL) and syncing them.
-- **`weekly/`**: 🚧 **Work in Progress (Ongoing)**. Intended for weekly data aggregation and reporting.
+- **`weekly/`**: Intended for weekly data aggregation and reporting.
+    - `weekly_report.py`: Main script for downloading reports (PO, RFM), then processing it and syncing it to Synology
 - **`.github/workflows/`**: CI/CD configurations for automated runs.
 
 ## Setup & Installation
