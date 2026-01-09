@@ -19,8 +19,7 @@ from core.config import dailyScrapperConfig
 from core.cps import login_to_cps
 from core.synology import get_synology_connection, daily_upload_to_synology
 from core.bigquery import upload_to_bq
-from core.scrapefunction import scrape_po_receive_data, scrape_tl_receive_data
-
+from core.scrapefunction import scrape_po_receive_data, scrape_tl_receive_data, scrape_inventory_handover
 
 
 # --- resolve paths correctly ---
@@ -97,6 +96,25 @@ def main():
                 tl_receive_csv = os.path.join(dailyScrapperConfig.DOWNLOAD_DIR, "tl_receive_data.csv")
                 tl_receive_df.to_csv(tl_receive_csv, index=False)
                 sync_registry["tl_receive"] = tl_receive_csv
+
+                # 3. scrape inventory handover
+                inventory_handover_df = scrape_inventory_handover(page, 100, 110)
+                
+                # Sync to BQ
+                if bq_client:
+                    try:
+                        table_id = f"{bq_client.project}.{dailyScrapperConfig.BQ_DATASET}.{dailyScrapperConfig.BQ_TABLE_INVENTORY_HO}"
+                        job_config = bigquery.LoadJobConfig(write_disposition="WRITE_TRUNCATE", autodetect=True)
+                        job = bq_client.load_table_from_dataframe(inventory_handover_df, table_id, job_config=job_config)
+                        job.result()
+                        print(f"Synced Inventory Handover to BQ: {table_id}")
+                    except Exception as e:
+                        print(f"Failed to sync Inventory Handover to BQ: {e}")
+
+                # Save to CSV for Synology
+                inventory_handover_csv = os.path.join(dailyScrapperConfig.DOWNLOAD_DIR, "inventory_handover_data.csv")
+                inventory_handover_df.to_csv(inventory_handover_csv, index=False)
+                sync_registry["inventory_handover"] = inventory_handover_csv
 
             finally:
                 browser.close()
