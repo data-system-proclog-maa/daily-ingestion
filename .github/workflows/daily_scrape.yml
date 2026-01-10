@@ -1,9 +1,9 @@
-name: Daily Data Download and Sync
+name: Daily Data Scrape and Sync
 permissions:
   contents: read
 
 on:
-  #schedule:
+  #schedule: #will check later, need to test first
     #- cron: '0 21 * * *'
   workflow_dispatch: # Allows manual trigger
     inputs:
@@ -41,4 +41,4 @@ jobs:
           BQ_TABLE_PO: ${{ secrets.BQ_TABLE_PO }}
           BQ_TABLE_RFM: ${{ secrets.BQ_TABLE_RFM }}
           BQ_TABLE_TL: ${{ secrets.BQ_TABLE_TL }}
-        run: python daily/automation.py
+        run: python daily/scrapper.py
